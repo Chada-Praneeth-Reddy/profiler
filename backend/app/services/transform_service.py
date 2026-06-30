@@ -17,12 +17,13 @@ def transform_candidate_data(
     if github_url:
         github_data = parse_github_profile(github_url)
 
+        candidate["github"] = github_data["github"]
+
         existing_skills = candidate.get("skills", [])
 
-        candidate.update(github_data)
-
         candidate["skills"] = (
-            existing_skills + github_data.get("skills", [])
-        )
+              existing_skills +
+              github_data["skills"]
+                              )
 
     return candidate
