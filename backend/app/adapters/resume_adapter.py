@@ -1,7 +1,7 @@
 from pypdf import PdfReader
 from docx import Document
 from pathlib import Path
-
+from app.normalizers.experience import extract_total_experience
 
 SKILL_KEYWORDS = [
     "Python",
@@ -86,6 +86,8 @@ def parse_resume(file, filename):
         }
 
     return {
-        "resume_text": text[:1000],
-        "skills": detect_skills(text)
-    }
+    "resume_text": text[:1000],
+    "skills": detect_skills(text),
+    "total_experience_years":
+        extract_total_experience(text)
+}
