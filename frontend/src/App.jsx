@@ -1,10 +1,37 @@
 import { useState } from "react";
+import { transformCandidate } from "./services/api.js";
 
 function App() {
   const [csvFile, setCsvFile] = useState(null);
 const [resumeFile, setResumeFile] = useState(null);
 const [githubUrl, setGithubUrl] = useState("");
+const [result, setResult] = useState(null);
+const [loading, setLoading] = useState(false);
+  const handleTransform = async () => {
+  if (!csvFile && !resumeFile && !githubUrl.trim()) {
+  alert("Please provide at least one source!");
+  return;
+   }
 
+  try {
+    setLoading(true);
+
+    const data = await transformCandidate(
+      csvFile,
+      resumeFile,
+      githubUrl
+    );
+
+    setResult(data);
+
+  } catch (error) {
+    console.error(error);
+    alert("Transformation failed!");
+
+  } finally {
+    setLoading(false);
+  }
+};
   return (
     <div
       style={{
@@ -17,7 +44,7 @@ const [githubUrl, setGithubUrl] = useState("");
       <h1>Candidate Profile Transformer</h1>
 
       <p>
-        Merge Recruiter CSV + GitHub + Resume Text into one canonical profile.
+        Merge Recruiter CSV + GitHub + Resume into one canonical profile.
       </p>
 
       <hr />
@@ -57,7 +84,7 @@ const [githubUrl, setGithubUrl] = useState("");
 
       <br />
       <br />
-
+      
       <h3>Output Configuration</h3>
 
       <select>
@@ -68,31 +95,19 @@ const [githubUrl, setGithubUrl] = useState("");
       <br />
       <br />
 
-      <button
-        style={{
-          padding: "12px 24px",
-          cursor: "pointer",
-        }}
-      >
-        Transform Candidate
-      </button>
+      <button onClick={handleTransform}>
+  {loading ? "Transforming..." : "Transform Candidate"}
+</button>
 
       <hr />
 
       <h2>Output</h2>
 
-      <pre
-        style={{
-          background: "#f4f4f4",
-          padding: "20px",
-          borderRadius: "10px",
-        }}
-      >
-{`{
-  "full_name": "John Doe",
-  "skills": ["Python", "React", "SQL"]
-}`}
-      </pre>
+      <pre>
+  {result
+    ? JSON.stringify(result, null, 2)
+    : "No transformation yet."}
+</pre>
     </div>
   );
 }
