@@ -1,4 +1,5 @@
 from app.adapters.recruiter_csv import parse_recruiter_csv
+from app.adapters.github_adapter import parse_github_profile
 
 
 def transform_candidate_data(
@@ -8,13 +9,20 @@ def transform_candidate_data(
 ):
     candidate = {}
 
+    # CSV
     if csv_file:
         candidate.update(parse_recruiter_csv(csv_file))
 
+    # GitHub
     if github_url:
-        candidate["github_url"] = github_url
+        github_data = parse_github_profile(github_url)
 
-    # Resume processing comes later
-    # GitHub API enrichment comes later
+        existing_skills = candidate.get("skills", [])
+
+        candidate.update(github_data)
+
+        candidate["skills"] = (
+            existing_skills + github_data.get("skills", [])
+        )
 
     return candidate
