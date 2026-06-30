@@ -14,9 +14,9 @@ async def transform_candidate(
 ):
 
     result = transform_candidate_data(
-        csv_file.file if csv_file else None,
-        resume_file.file if resume_file else None,
-        github_url,
-    )
+    csv_file,
+    resume_file,
+    github_url
+)
 
     return result

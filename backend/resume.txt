@@ -1,0 +1,12 @@
+Praneeth Reddy
+
+Skills:
+Python
+FastAPI
+React
+Docker
+AWS
+PostgreSQL
+
+Experience:
+Built full-stack web applications.
