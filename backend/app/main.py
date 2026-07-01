@@ -10,7 +10,7 @@ app = FastAPI(
 origins = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
-    "https://profiler-seven-hazel.vercel.app"
+    "https://profiler-seven-hazel.vercel.app",
     "https://profiler-chada2.vercel.app"
 ]
 
@@ -28,7 +28,7 @@ app.include_router(router)
 @app.get("/")
 def root():
     return {
-        "message": "Candidate Profile Transformer API is running 🚀"
+        "message": "Profiler API is running 🚀"
     }
 
 
@@ -41,6 +41,6 @@ def health():
 @app.get("/version")
 def version():
     return {
-        "name": "Candidate Profile Transformer",
+        "name": "Profiler",
         "version": "1.0.0"
     }
