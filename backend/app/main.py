@@ -9,6 +9,7 @@ app = FastAPI(
 
 origins = [
     "http://localhost:5173",
+    "http://127.0.0.1:5173",
     "https://profiler-l3yykv0xw-chada2.vercel.app"
 ]
 
@@ -34,4 +35,11 @@ def root():
 def health():
     return {
         "status": "healthy"
+    }
+
+@app.get("/version")
+def version():
+    return {
+        "name": "Candidate Profile Transformer",
+        "version": "1.0.0"
     }

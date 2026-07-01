@@ -3,13 +3,14 @@ from datetime import datetime
 
 
 def extract_total_experience(text):
+
     pattern = r"(20\d{2})\s*-\s*(Present|20\d{2})"
 
     matches = re.findall(pattern, text)
 
-    total_years = 0
-
     current_year = datetime.now().year
+
+    total = 0
 
     for start, end in matches:
 
@@ -20,6 +21,6 @@ def extract_total_experience(text):
         else:
             end = int(end)
 
-        total_years += max(0, end - start)
+        total += max(0, end - start)
 
-    return total_years
+    return total

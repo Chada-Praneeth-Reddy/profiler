@@ -17,3 +17,29 @@ def parse_recruiter_csv(file):
         "source": "recruiter_csv",
         "skills": []
     }
+
+def parse_recruiter_csv_batch(file):
+
+    df = pd.read_csv(file, dtype=str)
+
+    candidates = []
+
+    for _, row in df.iterrows():
+
+        candidates.append({
+            "full_name": row.get("name") or row.get("full_name") or "",
+            "email": row.get("email") or "",
+            "phone": row.get("phone") or row.get("mobile") or "",
+            "source": "recruiter_csv",
+            "skills": []
+        })
+
+    return candidates
+
+def is_batch_csv(file):
+
+    df = pd.read_csv(file, dtype=str)
+
+    file.seek(0)
+
+    return len(df) > 1

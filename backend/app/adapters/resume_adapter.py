@@ -2,30 +2,8 @@ from pypdf import PdfReader
 from docx import Document
 from pathlib import Path
 from app.normalizers.experience import extract_total_experience
+from app.services.nlp_service import extract_skills_nlp
 
-SKILL_KEYWORDS = [
-    "Python",
-    "Java",
-    "C++",
-    "JavaScript",
-    "TypeScript",
-    "React",
-    "Next.js",
-    "Node.js",
-    "FastAPI",
-    "Django",
-    "Flask",
-    "Docker",
-    "Kubernetes",
-    "AWS",
-    "PostgreSQL",
-    "MongoDB",
-    "Redis",
-    "Git",
-    "Machine Learning",
-    "TensorFlow",
-    "PyTorch",
-]
 
 
 def extract_pdf_text(file):
@@ -51,22 +29,6 @@ def extract_txt_text(file):
     return file.read().decode("utf-8")
 
 
-def detect_skills(text):
-    text_lower = text.lower()
-
-    skills = []
-
-    for skill in SKILL_KEYWORDS:
-        if skill.lower() in text_lower:
-            skills.append({
-                "name": skill,
-                "confidence": 0.85,
-                "source": "resume"
-            })
-
-    return skills
-
-
 def parse_resume(file, filename):
     extension = Path(filename).suffix.lower()
 
@@ -82,12 +44,13 @@ def parse_resume(file, filename):
     else:
         return {
             "resume_text": "",
-            "skills": []
+            "skills": [],
+            "total_experience_years": 0
         }
 
     return {
     "resume_text": text[:1000],
-    "skills": detect_skills(text),
+    "skills": extract_skills_nlp(text),
     "total_experience_years":
         extract_total_experience(text)
 }

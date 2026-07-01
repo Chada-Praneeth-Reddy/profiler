@@ -3,6 +3,12 @@ from app.adapters.github_adapter import parse_github_profile
 from app.adapters.resume_adapter import parse_resume
 from app.normalizers.skills import merge_skills
 from app.normalizers.candidate_merge import choose_first
+from app.services.confidence_service import (
+    calculate_overall_confidence
+)
+from app.services.provenance_service import (
+    build_provenance
+)
 
 def transform_candidate_data(
     csv_file=None,
@@ -29,7 +35,7 @@ def transform_candidate_data(
         github_data = parse_github_profile(github_url)
         
         candidate["github"] = github_data["github"]
-        
+
         github_skills = github_data.get("skills", [])
 
     if resume_file:
@@ -64,6 +70,16 @@ def transform_candidate_data(
     csv_data.get("phone"),
     resume_data.get("phone")
      )
+    
+    candidate["overall_confidence"] = (
+    calculate_overall_confidence(candidate)
+)
 
+    candidate["provenance"] = build_provenance(
+    candidate,
+    csv_present=csv_file is not None,
+    resume_present=resume_file is not None,
+    github_present=bool(github_url)
+)
 
     return candidate

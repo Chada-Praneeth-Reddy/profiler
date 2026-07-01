@@ -1,16 +1,20 @@
-from pydantic import BaseModel, Field
-from typing import List, Optional
+from typing import Optional, List, Dict, Any
+
+from pydantic import BaseModel
+
+from app.models.skill import Skill
 
 
-class Skill(BaseModel):
-    name: str
-    confidence: float
-    source: str
+class CandidateProfile(BaseModel):
 
-
-class Candidate(BaseModel):
     full_name: Optional[str] = None
     email: Optional[str] = None
     phone: Optional[str] = None
-    github_url: Optional[str] = None
-    skills: List[Skill] = Field(default_factory=list)
+
+    skills: List[Skill] = []
+
+    github: Optional[Dict[str, Any]] = None
+
+    total_experience_years: Optional[int] = None
+
+    resume_text: Optional[str] = None
